@@ -19,7 +19,7 @@ background_image = pygame.image.load("space.jpg")  # Replace "background.png" wi
 # Resize the background image to match the screen size (optional)
 background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
-
+#test
 
 
 # Create the screen
