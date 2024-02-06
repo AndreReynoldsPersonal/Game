@@ -13,8 +13,6 @@ CIRCLE_COLOR = (255,255,255)
 JUMP_SPEED = -20  # Initial jump velocity
 GRAVITY = 0.75  # Acceleration due to gravity
 
-SHIELD_COLOR = (46,103,248)
-
 # Load the background image
 background_image = pygame.image.load("space.jpg")  # Replace "background.png" with your image file name
 
