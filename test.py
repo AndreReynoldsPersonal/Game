@@ -1,36 +1,34 @@
 import pygame
 import sys
 import math
+from Player import Player  # Import the Player class from Player.py
 
 # Initialize Pygame
 pygame.init()
 
 # Constants
 SCREEN_WIDTH, SCREEN_HEIGHT = 1400, 750
-CIRCLE_RADIUS = 20
-CIRCLE_COLOR = (255, 255, 255)
-JUMP_SPEED = -20  # Initial jump velocity
 GRAVITY = 0.75  # Acceleration due to gravity
 FRICTION = 0.95  # Friction coefficient (adjust as needed)
+
+# Create the screen
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Rotating Player")
 
 # Load the background image
 background_image = pygame.image.load("space.jpg")
 background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
-# Create the screen
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Movable Circle")
+# Load the player sprite image
+player_image = pygame.image.load("Ship.png")  # Replace with your image file name
+player_image = pygame.transform.scale(player_image, (80, 80))  # Adjust the size as needed
 
-# Movement speed
-move_speed = 0.75
+player = Player(player_image)
+player.rect.center = (100, 100)  # Initial position of the player
+player.angle = 0  # Initial angle of the player (in degrees)
 
-# Jump state variables
-is_jumping = False
-jump_velocity = 0
-
-# Initial position and velocity of the circle
-circle_x, circle_y = 100, 110
-circle_velocity_x, circle_velocity_y = 0, 0
+# Rotation speed (adjust as needed)
+rotation_speed = 5
 
 # Game loop
 while True:
@@ -41,30 +39,42 @@ while True:
 
     keys = pygame.key.get_pressed()
 
-    # Apply friction to slow down the ball
-    circle_velocity_x *= FRICTION
-    circle_velocity_y *= FRICTION
+    # Apply friction to slow down the player
+    player.velocity *= FRICTION
 
     if keys[pygame.K_a]:
-        circle_velocity_x -= move_speed
+        player.velocity.x -= 0.75
     if keys[pygame.K_d]:
-        circle_velocity_x += move_speed
+        player.velocity.x += 0.75
     if keys[pygame.K_w]:
-        circle_velocity_y -= move_speed
+        player.velocity.y -= 0.75
     if keys[pygame.K_s]:
-        circle_velocity_y += move_speed
+        player.velocity.y += 0.75
 
-    # Update the ball's position based on velocity
-    circle_x += circle_velocity_x
-    circle_y += circle_velocity_y
+    # Update the player's position based on velocity
+    player.rect.x += player.velocity.x
+    player.rect.y += player.velocity.y
 
-    # if circle_y >= SCREEN_HEIGHT + 200:
-    #     pygame.quit()
-    #     sys.exit()
+    # Rotate the player based on arrow key inputs
+    if keys[pygame.K_LEFT]:
+        player.angle += rotation_speed
+    if keys[pygame.K_RIGHT]:
+        player.angle -= rotation_speed
 
+    # Rotate the player sprite
+    rotated_player_image = pygame.transform.rotate(player.image, player.angle)
+    rotated_rect = rotated_player_image.get_rect(center=player.rect.center)
+
+    # Clear the screen
     screen.fill((0, 0, 0))
     screen.blit(background_image, (0, 0))
     pygame.draw.rect(screen, (255, 255, 255), (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), 2)
-    pygame.draw.circle(screen, CIRCLE_COLOR, (int(circle_x), int(circle_y)), CIRCLE_RADIUS)
+
+    # Draw the rotated player sprite
+    screen.blit(rotated_player_image, rotated_rect)
+
     pygame.display.flip()
     pygame.time.delay(20)
+
+    
+    
