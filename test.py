@@ -7,7 +7,7 @@ from Player import Player  # Import the Player class from Player.py
 pygame.init()
 
 # Constants
-SCREEN_WIDTH, SCREEN_HEIGHT = 1400, 750
+SCREEN_WIDTH, SCREEN_HEIGHT = 1200, 650
 GRAVITY = 0.75  # Acceleration due to gravity
 FRICTION = 0.95  # Friction coefficient (adjust as needed)
 
@@ -21,7 +21,7 @@ background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREE
 
 # Load the player sprite image
 player_image = pygame.image.load("Ship.png")  # Replace with your image file name
-player_image = pygame.transform.scale(player_image, (80, 80))  # Adjust the size as needed
+player_image = pygame.transform.scale(player_image, (100, 100))  # Adjust the size as needed
 
 player = Player(player_image)
 player.rect.center = (100, 100)  # Initial position of the player
@@ -42,14 +42,11 @@ while True:
     # Apply friction to slow down the player
     player.velocity *= FRICTION
 
-    if keys[pygame.K_a]:
-        player.velocity.x -= 0.75
-    if keys[pygame.K_d]:
-        player.velocity.x += 0.75
     if keys[pygame.K_w]:
-        player.velocity.y -= 0.75
-    if keys[pygame.K_s]:
-        player.velocity.y += 0.75
+        speed_multiplier = 0.75
+        angle_in_radians = math.radians(player.angle)
+        player.velocity.y -= speed_multiplier * math.sin(angle_in_radians)  # Negate the Y-component
+        player.velocity.x += speed_multiplier * math.cos(angle_in_radians)
 
     # Update the player's position based on velocity
     player.rect.x += player.velocity.x
@@ -60,6 +57,8 @@ while True:
         player.angle += rotation_speed
     if keys[pygame.K_RIGHT]:
         player.angle -= rotation_speed
+    
+    print(math.cos(player.angle))
 
     # Rotate the player sprite
     rotated_player_image = pygame.transform.rotate(player.image, player.angle)
