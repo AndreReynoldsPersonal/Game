@@ -9,32 +9,31 @@ from Asteroid import Asteroid
 pygame.init()
 
 # Constants
-SCREEN_WIDTH, SCREEN_HEIGHT = 1200, 600
-GRAVITY = 0.75  # Acceleration due to gravity
+SCREEN_WIDTH, SCREEN_HEIGHT = 1600, 900
 FRICTION = 0.95  # Friction coefficient (adjust as needed)
 
 # Create the screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Rotating Player")
 
-# Load the background image
-background_image = pygame.image.load("images/space.jpg")
-background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # Load the player sprite image
 player_image = pygame.image.load("images/ship2.png")  # Replace with your image file name
 player_image = pygame.transform.scale(player_image, (100, 80))  # Adjust the size as needed
 
 player = Player(player_image,SCREEN_WIDTH,SCREEN_HEIGHT)
-player.angle = 0  # Initial angle of the player (in degrees)
+speed_multiplier = 0.75
 
-# Rotation speed (adjust as needed)
-rotation_speed = 5
 
 bullets = pygame.sprite.Group()  # Create a sprite group to store bullets
+asteroids = pygame.sprite.Group()
 space_pressed = False
 
-ass = Asteroid("images/Asteroid.png",SCREEN_WIDTH,SCREEN_HEIGHT)
+clock = pygame.time.Clock()
+
+spawn_interval = 5000
+last_spawn_time = pygame.time.get_ticks()
+
 
 # Game loop
 while True:
@@ -42,23 +41,38 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+    
+    # Get current time
+    current_time = pygame.time.get_ticks()
+
+    # Check if it's time to spawn a new object
+    if current_time - last_spawn_time > spawn_interval:
+        # It's time to spawn a new object
+        print("Spawning a new object!")
+        # Reset the last spawn time
+        last_spawn_time = current_time
+
+        # Example of spawning an object: Drawing a rectangle
+        for i in range(5):
+            ass = Asteroid("images/Asteroid.png",SCREEN_WIDTH,SCREEN_HEIGHT)
+            asteroids.add(ass)
+
+        
 
     keys = pygame.key.get_pressed()
 
     # Apply friction to slow down the player
     player.velocity *= FRICTION
 
-    if keys[pygame.K_UP]:
-        speed_multiplier = 0.75
-        angle_in_radians = math.radians(player.angle)
-        player.velocity.y -= speed_multiplier * math.sin(angle_in_radians)  # Negate the Y-component
-        player.velocity.x += speed_multiplier * math.cos(angle_in_radians)
+    if keys[pygame.K_w]:
+        player.velocity.y -= speed_multiplier 
+    if keys[pygame.K_s]:
+        player.velocity.y += speed_multiplier 
+    if keys[pygame.K_a]:
+        player.velocity.x -= speed_multiplier
+    if keys[pygame.K_d]:
+        player.velocity.x += speed_multiplier
 
-    # Rotate the player based on arrow key inputs
-    if keys[pygame.K_LEFT]:
-        player.angle += rotation_speed
-    if keys[pygame.K_RIGHT]:
-        player.angle -= rotation_speed
     
     # Check if spacebar is pressed and it wasn't pressed in the previous frame
     if keys[pygame.K_SPACE] and not space_pressed:
@@ -72,27 +86,28 @@ while True:
         space_pressed = False
     
     bullets.update()
+    asteroids.update()
     player.update()
-    ass.update()
-
-
-    # Rotate the player sprite
-    rotated_player_image = pygame.transform.rotate(player.image, player.angle)
-    rotated_rect = rotated_player_image.get_rect(center=player.rect.center)
 
     # Clear the screen
     screen.fill((0, 0, 0))
-    screen.blit(background_image, (0, 0))
+    # screen.blit(background_image, (0, 0))
     pygame.draw.rect(screen, (255, 255, 255), (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), 2)
 
     # Draw all bullets
     for bullet in bullets:
-        screen.blit(bullet.image, bullet.rect)
+        screen.blit(bullet.image, (bullet.rect.x , bullet.rect.y))
+
+    # Draw ass
+    for ass in asteroids:
+        screen.blit(ass.image, (ass.rect.x , ass.rect.y))
 
     # Draw the rotated player sprite
-    screen.blit(rotated_player_image, rotated_rect)
+    screen.blit(player.image, (player.rect.x, player.rect.y))
 
-    screen.blit(ass.image, ass.rect)
+    # Draw a visual representation of the mouse
+    pygame.draw.circle(screen, (255,255,255), pygame.mouse.get_pos(), 10)
+
 
     pygame.display.flip()
     pygame.time.delay(20)

@@ -7,7 +7,7 @@ class Bullet(pygame.sprite.Sprite):
     def __init__(self, start_pos, angle):
         super().__init__()
         self.image = pygame.Surface((7, 7))  # Replace with your bullet image or use a rectangle
-        self.image.fill((255, 0, 0))  # Red color
+        self.image.fill((255, 255, 255))  # Red color
         self.rect = self.image.get_rect()
         self.rect.center = start_pos
         self.angle = angle
