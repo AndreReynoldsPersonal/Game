@@ -3,6 +3,7 @@ import sys
 import math
 from Player import Player  # Import the Player class from Player.py
 from bullet import Bullet
+from Asteroid import Asteroid
 
 # Initialize Pygame
 pygame.init()
@@ -34,6 +35,8 @@ rotation_speed = 5
 bullets = pygame.sprite.Group()  # Create a sprite group to store bullets
 space_pressed = False
 
+ass = Asteroid("images/Asteroid.png",SCREEN_WIDTH,SCREEN_HEIGHT)
+
 # Game loop
 while True:
     for event in pygame.event.get():
@@ -61,7 +64,6 @@ while True:
     # Check if spacebar is pressed and it wasn't pressed in the previous frame
     if keys[pygame.K_SPACE] and not space_pressed:
         # Create a new bullet and add it to the sprite group
-        print(player.angle)
         bullet = Bullet(player.rect.center, player.angle)
         bullets.add(bullet)
         space_pressed = True  # Set the flag to True
@@ -72,6 +74,7 @@ while True:
     
     bullets.update()
     player.update()
+    ass.update()
 
 
     # Rotate the player sprite
@@ -89,6 +92,8 @@ while True:
 
     # Draw the rotated player sprite
     screen.blit(rotated_player_image, rotated_rect)
+
+    screen.blit(ass.image, ass.rect)
 
     pygame.display.flip()
     pygame.time.delay(20)

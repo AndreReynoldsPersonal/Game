@@ -11,7 +11,7 @@ class Bullet(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = start_pos
         self.angle = angle
-        self.speed = 10  # Adjust the speed as needed
+        self.speed = 15  # Adjust the speed as needed
     
     def update(self):
         # Calculate the velocity components based on the angle
