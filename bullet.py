@@ -6,7 +6,7 @@ SCREEN_WIDTH, SCREEN_HEIGHT = 1600, 900
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, start_pos, angle):
         super().__init__()
-        self.image = pygame.Surface((12, 3))  # Replace with your bullet image or use a rectangle
+        self.image = pygame.Surface((7, 7))  # Replace with your bullet image or use a rectangle
         self.image.fill((255, 0, 0))  # Red color
         self.rect = self.image.get_rect()
         self.rect.center = start_pos
@@ -25,3 +25,4 @@ class Bullet(pygame.sprite.Sprite):
         # Check if the bullet is out of bounds
         if not pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT).colliderect(self.rect):
             self.kill()  # Remove the bullet if it's out of bounds
+

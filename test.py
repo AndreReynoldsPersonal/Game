@@ -22,7 +22,7 @@ background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREE
 
 # Load the player sprite image
 player_image = pygame.image.load("images/ship2.png")  # Replace with your image file name
-player_image = pygame.transform.scale(player_image, (130, 100))  # Adjust the size as needed
+player_image = pygame.transform.scale(player_image, (100, 80))  # Adjust the size as needed
 
 player = Player(player_image)
 player.rect.center = (100, 100)  # Initial position of the player
@@ -65,10 +65,11 @@ while True:
     # Check if spacebar is pressed and it wasn't pressed in the previous frame
     if keys[pygame.K_SPACE] and not space_pressed:
         # Create a new bullet and add it to the sprite group
+        print(player.angle)
         bullet = Bullet(player.rect.center, player.angle)
         bullets.add(bullet)
         space_pressed = True  # Set the flag to True
-        
+
     # Update the flag if spacebar is not pressed
     if not keys[pygame.K_SPACE]:
         space_pressed = False
