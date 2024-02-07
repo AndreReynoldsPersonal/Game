@@ -20,8 +20,8 @@ background_image = pygame.image.load("space.jpg")
 background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # Load the player sprite image
-player_image = pygame.image.load("Ship.png")  # Replace with your image file name
-player_image = pygame.transform.scale(player_image, (100, 100))  # Adjust the size as needed
+player_image = pygame.image.load("ship2.png")  # Replace with your image file name
+player_image = pygame.transform.scale(player_image, (130, 100))  # Adjust the size as needed
 
 player = Player(player_image)
 player.rect.center = (100, 100)  # Initial position of the player
