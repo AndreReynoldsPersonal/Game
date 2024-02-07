@@ -2,7 +2,7 @@ import pygame
 
 
     
-SCREEN_WIDTH, SCREEN_HEIGHT = 1400, 750
+SCREEN_WIDTH, SCREEN_HEIGHT = 1600, 900
 
 class Player(pygame.sprite.Sprite):
     def __init__(self,player_image):
