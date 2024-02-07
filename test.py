@@ -24,7 +24,7 @@ background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREE
 player_image = pygame.image.load("images/ship2.png")  # Replace with your image file name
 player_image = pygame.transform.scale(player_image, (100, 80))  # Adjust the size as needed
 
-player = Player(player_image)
+player = Player(player_image,SCREEN_WIDTH,SCREEN_HEIGHT)
 player.rect.center = (100, 100)  # Initial position of the player
 player.angle = 0  # Initial angle of the player (in degrees)
 
@@ -52,10 +52,6 @@ while True:
         player.velocity.y -= speed_multiplier * math.sin(angle_in_radians)  # Negate the Y-component
         player.velocity.x += speed_multiplier * math.cos(angle_in_radians)
 
-    # Update the player's position based on velocity
-    player.rect.x += player.velocity.x
-    player.rect.y += player.velocity.y
-
     # Rotate the player based on arrow key inputs
     if keys[pygame.K_LEFT]:
         player.angle += rotation_speed
@@ -75,6 +71,7 @@ while True:
         space_pressed = False
     
     bullets.update()
+    player.update()
 
 
     # Rotate the player sprite
