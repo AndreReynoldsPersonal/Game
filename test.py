@@ -9,7 +9,7 @@ from Asteroid import Asteroid
 pygame.init()
 
 # Constants
-SCREEN_WIDTH, SCREEN_HEIGHT = 1600, 900
+SCREEN_WIDTH, SCREEN_HEIGHT = 1200, 600
 GRAVITY = 0.75  # Acceleration due to gravity
 FRICTION = 0.95  # Friction coefficient (adjust as needed)
 
@@ -26,7 +26,6 @@ player_image = pygame.image.load("images/ship2.png")  # Replace with your image 
 player_image = pygame.transform.scale(player_image, (100, 80))  # Adjust the size as needed
 
 player = Player(player_image,SCREEN_WIDTH,SCREEN_HEIGHT)
-player.rect.center = (100, 100)  # Initial position of the player
 player.angle = 0  # Initial angle of the player (in degrees)
 
 # Rotation speed (adjust as needed)
