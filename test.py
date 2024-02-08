@@ -27,13 +27,15 @@ speed_multiplier = 0.75
 
 bullets = pygame.sprite.Group()  # Create a sprite group to store bullets
 asteroids = pygame.sprite.Group()
-space_pressed = False
 
 # Initialize a cooldown timer for firing outside the game loop
 bullet_cooldown = 0
 bullet_cooldown_max = 5  # Adjust this value to control firing rate
 
 clock = pygame.time.Clock()
+
+pygame.mouse.set_visible(False)
+
 
 spawn_interval = 4000
 num_spawn = 4
@@ -96,17 +98,6 @@ while True:
     if keys[pygame.K_d]:
         player.velocity.x += speed_multiplier
 
-    
-    # Check if spacebar is pressed and it wasn't pressed in the previous frame
-    # if keys[pygame.MOUSEBUTTONDOWN] and not space_pressed:
-    #     # Create a new bullet and add it to the sprite group
-    #     bullet = Bullet(player.rect.center, player.angle)
-    #     bullets.add(bullet)
-    #     space_pressed = True  # Set the flag to True
-
-    # # Update the flag if spacebar is not pressed
-    # if not keys[pygame.K_SPACE]:
-    #     space_pressed = False
 
     #Check for mouse button press without relying on the event loop
     if pygame.mouse.get_pressed()[0]:  # Left mouse button is pressed
@@ -139,8 +130,22 @@ while True:
     # Draw the rotated player sprite
     screen.blit(player.image, (player.rect.x, player.rect.y))
 
-    # Draw a visual representation of the mouse
-    pygame.draw.circle(screen, (255,255,255), pygame.mouse.get_pos(), 10)
+    # Get mouse position
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+
+    # Set the size of the crosshair and the size of the gap
+    crosshair_size = 10
+    gap_size = 5  # This controls the size of the gap in the center of the crosshair
+
+    # Calculate start and end points for horizontal line, leaving a gap in the center
+    pygame.draw.line(screen, (255, 255, 255), (mouse_x - crosshair_size, mouse_y), (mouse_x - gap_size, mouse_y), 2)
+    pygame.draw.line(screen, (255, 255, 255), (mouse_x + gap_size, mouse_y), (mouse_x + crosshair_size, mouse_y), 2)
+
+    # Calculate start and end points for vertical line, leaving a gap in the center
+    pygame.draw.line(screen, (255, 255, 255), (mouse_x, mouse_y - crosshair_size), (mouse_x, mouse_y - gap_size), 2)
+    pygame.draw.line(screen, (255, 255, 255), (mouse_x, mouse_y + gap_size), (mouse_x, mouse_y + crosshair_size), 2)
+
+
 
 
     pygame.display.flip()
