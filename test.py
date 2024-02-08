@@ -1,12 +1,19 @@
 import pygame
 import sys
 import math
+import random
 from Player import Player  # Import the Player class from Player.py
 from bullet import Bullet
 from Asteroid import Asteroid
 
 # Initialize Pygame
 pygame.init()
+
+# List of image paths
+image_paths = ['images/Asteroid1.png', 'images/Asteroid2.png', 'images/Asteroid3.png', 'images/Asteroid4.png']
+
+
+
 
 # Constants
 SCREEN_WIDTH, SCREEN_HEIGHT = 1600, 900
@@ -62,7 +69,7 @@ while True:
 
         # Example of spawning an object: Drawing a rectangle
         for i in range(num_spawn):
-            ass = Asteroid("images/Asteroid.png",SCREEN_WIDTH,SCREEN_HEIGHT)
+            ass = Asteroid(random.choice(image_paths),SCREEN_WIDTH,SCREEN_HEIGHT)
             asteroids.add(ass)
     
     # Check for collision between the player and any asteroid
