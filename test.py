@@ -29,9 +29,14 @@ bullets = pygame.sprite.Group()  # Create a sprite group to store bullets
 asteroids = pygame.sprite.Group()
 space_pressed = False
 
+# Initialize a cooldown timer for firing outside the game loop
+bullet_cooldown = 0
+bullet_cooldown_max = 5  # Adjust this value to control firing rate
+
 clock = pygame.time.Clock()
 
-spawn_interval = 5000
+spawn_interval = 4000
+num_spawn = 4
 last_spawn_time = pygame.time.get_ticks()
 
 
@@ -49,13 +54,31 @@ while True:
     if current_time - last_spawn_time > spawn_interval:
         # It's time to spawn a new object
         print("Spawning a new object!")
+        num_spawn +=2
         # Reset the last spawn time
         last_spawn_time = current_time
 
         # Example of spawning an object: Drawing a rectangle
-        for i in range(5):
+        for i in range(num_spawn):
             ass = Asteroid("images/Asteroid.png",SCREEN_WIDTH,SCREEN_HEIGHT)
             asteroids.add(ass)
+    
+    # Check for collision between the player and any asteroid
+    player_hit_list = pygame.sprite.spritecollide(player, asteroids, False)
+    if player_hit_list:
+            print("hit")
+            print(current_time/1000)
+            pygame.quit()
+            sys.exit()
+    
+    # Check for collision between bullets and asteroids
+    for bullet in bullets:
+        asteroid_hit_list = pygame.sprite.spritecollide(bullet, asteroids, True)
+        if asteroid_hit_list:
+            # Handle bullet hitting asteroid
+            bullets.remove(bullet)  # Remove the bullet that hit the asteroid
+            print("Asteroid destroyed!")  # Placeholder for actual collision handling
+            # You might want to increase score, create an explosion effect, etc.
 
         
 
@@ -75,15 +98,26 @@ while True:
 
     
     # Check if spacebar is pressed and it wasn't pressed in the previous frame
-    if keys[pygame.K_SPACE] and not space_pressed:
-        # Create a new bullet and add it to the sprite group
-        bullet = Bullet(player.rect.center, player.angle)
-        bullets.add(bullet)
-        space_pressed = True  # Set the flag to True
+    # if keys[pygame.MOUSEBUTTONDOWN] and not space_pressed:
+    #     # Create a new bullet and add it to the sprite group
+    #     bullet = Bullet(player.rect.center, player.angle)
+    #     bullets.add(bullet)
+    #     space_pressed = True  # Set the flag to True
 
-    # Update the flag if spacebar is not pressed
-    if not keys[pygame.K_SPACE]:
-        space_pressed = False
+    # # Update the flag if spacebar is not pressed
+    # if not keys[pygame.K_SPACE]:
+    #     space_pressed = False
+
+    #Check for mouse button press without relying on the event loop
+    if pygame.mouse.get_pressed()[0]:  # Left mouse button is pressed
+        if bullet_cooldown <= 0:
+            bullet = Bullet(player.rect.center, player.angle)
+            bullets.add(bullet)
+            bullet_cooldown = bullet_cooldown_max  # Reset cooldown
+
+    # Update cooldown
+    if bullet_cooldown > 0:
+        bullet_cooldown -= 1
     
     bullets.update()
     asteroids.update()
