@@ -41,7 +41,7 @@ class Asteroid(pygame.sprite.Sprite):
 
         #set velocity
         if(self.split):
-            self.velocity = pygame.Vector2(random.randint(-4, 4), random.randint(-4, 4))
+            self.velocity = pygame.Vector2(random.randint(-2, 2), random.randint(-2, 2))
         else:
             if edge == "top":
                 self.velocity = pygame.Vector2(0, random.randint(3, 8))
