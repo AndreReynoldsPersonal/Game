@@ -2,13 +2,22 @@ import pygame
 import random
 
 class Asteroid(pygame.sprite.Sprite):
-    def __init__(self, image_path, screen_width, screen_height):
+    def __init__(self, image_path, screen_width, screen_height,split):
         super().__init__()
         self.image = pygame.image.load(image_path)
-        self.image = pygame.transform.scale(self.image, (70, 70))  # Adjust the size as needed
+        self.split = split
+        if(split):
+            if(image_path == "images/piece1.png"):
+                self.image = pygame.transform.scale(self.image, (35, 45))  # Adjust the size as needed
+            else:
+                self.image = pygame.transform.scale(self.image, (40, 40))  # Adjust the size as needed
+        else:
+            self.image = pygame.transform.scale(self.image, (80, 80))  # Adjust the size as needed
+
         self.rect = self.image.get_rect()
         self.screen_width = screen_width
         self.screen_height = screen_height
+  
         self.spawn_position()
 
 
@@ -31,14 +40,17 @@ class Asteroid(pygame.sprite.Sprite):
             self.rect.y = random.randint(0, self.screen_height - self.rect.height)
 
         #set velocity
-        if edge == "top":
-            self.velocity = pygame.Vector2(0, random.randint(3, 8))
-        elif edge == "bottom":
-            self.velocity = pygame.Vector2(0, -random.randint(3, 8))
-        elif edge == "left":
-            self.velocity = pygame.Vector2(random.randint(3, 8), 0)
-        elif edge == "right":
-            self.velocity = pygame.Vector2(-random.randint(3, 8), 0)
+        if(self.split):
+            self.velocity = pygame.Vector2(random.randint(-4, 4), random.randint(-4, 4))
+        else:
+            if edge == "top":
+                self.velocity = pygame.Vector2(0, random.randint(3, 8))
+            elif edge == "bottom":
+                self.velocity = pygame.Vector2(0, -random.randint(3, 8))
+            elif edge == "left":
+                self.velocity = pygame.Vector2(random.randint(3, 8), 0)
+            elif edge == "right":
+                self.velocity = pygame.Vector2(-random.randint(3, 8), 0)
 
     def update(self):
         # Update the position of the asteroid based on velocity

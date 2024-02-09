@@ -10,9 +10,9 @@ from Asteroid import Asteroid
 pygame.init()
 
 # List of image paths
-image_paths = ['images/Asteroid1.png', 'images/Asteroid2.png', 'images/Asteroid3.png', 'images/Asteroid4.png']
+image_paths = ['images/Asteroid.png']
 
-
+splits = ['images/piece1.png','images/piece2.png','images/piece3.png']
 
 
 # Constants
@@ -45,8 +45,11 @@ pygame.mouse.set_visible(False)
 
 
 spawn_interval = 4000
-num_spawn = 4
+num_spawn = 2
 last_spawn_time = pygame.time.get_ticks()
+
+# Define font and font size
+font = pygame.font.Font(None, 36)  # You can adjust the font size as needed
 
 
 # Game loop
@@ -59,17 +62,17 @@ while True:
     # Get current time
     current_time = pygame.time.get_ticks()
 
+
     # Check if it's time to spawn a new object
     if current_time - last_spawn_time > spawn_interval:
         # It's time to spawn a new object
         print("Spawning a new object!")
-        num_spawn +=2
-        # Reset the last spawn time
         last_spawn_time = current_time
+        num_spawn += 1
 
         # Example of spawning an object: Drawing a rectangle
         for i in range(num_spawn):
-            ass = Asteroid(random.choice(image_paths),SCREEN_WIDTH,SCREEN_HEIGHT)
+            ass = Asteroid(random.choice(image_paths),SCREEN_WIDTH,SCREEN_HEIGHT,False)
             asteroids.add(ass)
     
     # Check for collision between the player and any asteroid
@@ -89,10 +92,17 @@ while True:
             print("Asteroid destroyed!")  # Placeholder for actual collision handling
             # You might want to increase score, create an explosion effect, etc.
 
+            for asteroid in asteroid_hit_list:
+            # Split the asteroid into smaller pieces
+                if asteroid.split == False:
+                    for i in range(3):  # Create three smaller asteroids
+                        new_asteroid = Asteroid(splits[i], SCREEN_WIDTH, SCREEN_HEIGHT,True)
+                        new_asteroid.rect.center = asteroid.rect.center  # Position the new asteroid at the same location as the destroyed one
+                        asteroids.add(new_asteroid)
+
         
 
     keys = pygame.key.get_pressed()
-
     # Apply friction to slow down the player
     player.velocity *= FRICTION
 
@@ -123,6 +133,11 @@ while True:
 
     # Clear the screen
     screen.fill((0, 0, 0))
+
+    # Render and display timer text
+    timer_text = font.render(f"Time: {int(current_time/1000)}", True, (255, 255, 255))
+    screen.blit(timer_text, (30, 30))  # Adjust the position of the timer text as needed
+
     # screen.blit(background_image, (0, 0))
     pygame.draw.rect(screen, (255, 255, 255), (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), 2)
 
