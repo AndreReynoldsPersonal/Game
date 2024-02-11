@@ -6,6 +6,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self.original_image = player_image
         self.image = self.original_image
+        self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.screen_width = screen_width
         self.screen_height = screen_height
@@ -30,4 +31,5 @@ class Player(pygame.sprite.Sprite):
         self.angle = (180 / math.pi) * -math.atan2(rel_y, rel_x)
         self.image = pygame.transform.rotate(self.original_image, int(self.angle))
         self.rect = self.image.get_rect(center=self.rect.center)
+        self.mask = pygame.mask.from_surface(self.image)
 

@@ -8,12 +8,14 @@ class Asteroid(pygame.sprite.Sprite):
         self.split = split
         if(split):
             if(image_path == "images/piece1.png"):
-                self.image = pygame.transform.scale(self.image, (35, 45))  # Adjust the size as needed
+                self.image = pygame.transform.scale(self.image, (30, 40))  # Adjust the size as needed
             else:
-                self.image = pygame.transform.scale(self.image, (40, 40))  # Adjust the size as needed
+                self.image = pygame.transform.scale(self.image, (35, 35))  # Adjust the size as needed
         else:
-            self.image = pygame.transform.scale(self.image, (80, 80))  # Adjust the size as needed
+            self.image = pygame.transform.scale(self.image, (65, 65))  # Adjust the size as needed
 
+
+        self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.screen_width = screen_width
         self.screen_height = screen_height

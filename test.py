@@ -26,10 +26,14 @@ pygame.display.set_caption("Rotating Player")
 
 # Load the player sprite image
 player_image = pygame.image.load("images/ship2.png")  # Replace with your image file name
-player_image = pygame.transform.scale(player_image, (100, 80))  # Adjust the size as needed
+player_image = pygame.transform.scale(player_image, (90, 75))  # Adjust the size as needed
+
+
 
 player = Player(player_image,SCREEN_WIDTH,SCREEN_HEIGHT)
 speed_multiplier = 0.75
+
+
 
 
 bullets = pygame.sprite.Group()  # Create a sprite group to store bullets
@@ -68,7 +72,7 @@ while True:
         # It's time to spawn a new object
         print("Spawning a new object!")
         last_spawn_time = current_time
-        num_spawn += 1
+        num_spawn += 0
 
         # Example of spawning an object: Drawing a rectangle
         for i in range(num_spawn):
@@ -76,13 +80,26 @@ while True:
             asteroids.add(ass)
     
     # Check for collision between the player and any asteroid
-    player_hit_list = pygame.sprite.spritecollide(player, asteroids, False)
-    if player_hit_list:
+    # player_hit_list = pygame.sprite.spritecollide(player, asteroids, False)
+    # if player_hit_list:
+    #         print("hit")
+    #         print(current_time/1000)
+    #         pygame.quit()
+    #         sys.exit()
+            
+
+    # Inside the game loop, replace the existing player-asteroid collision check
+    for asteroid in asteroids:
+        offset_x = asteroid.rect.x - player.rect.x
+        offset_y = asteroid.rect.y - player.rect.y
+        
+        if player.mask.overlap(asteroid.mask, (offset_x, offset_y)):
             print("hit")
-            print(current_time/1000)
+            print(current_time / 1000)
             pygame.quit()
             sys.exit()
-    
+
+
     # Check for collision between bullets and asteroids
     for bullet in bullets:
         asteroid_hit_list = pygame.sprite.spritecollide(bullet, asteroids, True)
