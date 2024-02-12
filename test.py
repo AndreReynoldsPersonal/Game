@@ -16,7 +16,7 @@ splits = ['images/piece1.png','images/piece2.png','images/piece3.png']
 
 
 # Constants
-SCREEN_WIDTH, SCREEN_HEIGHT = 1425, 750
+SCREEN_WIDTH, SCREEN_HEIGHT = 1400, 725 #change depending on device?
 FRICTION = 0.95  # Friction coefficient (adjust as needed)
 
 # Create the screen
@@ -52,6 +52,32 @@ pygame.mouse.set_visible(False)
 spawn_interval = 4000
 num_spawn = 2
 last_spawn_time = pygame.time.get_ticks()
+
+# Load start screen assets (images, fonts, etc.)
+font = pygame.font.Font(None, 74)  # Adjust the font and size as needed
+title_text = font.render('Asteroid Game', True, (255,255,255))
+start_text = font.render('Press any key to start', True, (255,255,255))
+
+# Function to show the start screen
+def show_start_screen():
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                running = False  # Exit the start screen loop to start the game
+
+        screen.fill((0,0,0))
+        screen.blit(title_text, (SCREEN_WIDTH // 2 - title_text.get_width() // 2, SCREEN_HEIGHT // 3))
+        screen.blit(start_text, (SCREEN_WIDTH // 2 - start_text.get_width() // 2, SCREEN_HEIGHT // 2))
+
+        pygame.display.flip()
+        pygame.time.delay(100)
+
+# Show the start screen
+show_start_screen()
 
 # Define font and font size
 font = pygame.font.Font(None, 36)  # You can adjust the font size as needed
