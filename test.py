@@ -29,7 +29,7 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 # Load start screen assets (images, fonts, etc.)
-font = pygame.font.Font(None, 50)  # Adjust the font and size as needed
+font = pygame.font.Font("ARCADE_N.TTF", 24)  # Adjust the font and size as needed
 title_text = font.render('Press any key', True, WHITE)
 start_text = font.render('to start', True, WHITE)
 start_screen = pygame.image.load("images/StartScreen.png").convert()
@@ -48,8 +48,8 @@ def show_start_screen():
 
         # Draw the background image
         screen.blit(start_screen, (0, 0))
-        screen.blit(title_text, (SCREEN_WIDTH // 2 - title_text.get_width() // 2, (SCREEN_HEIGHT // 3)+100))
-        screen.blit(start_text, (SCREEN_WIDTH // 2 - start_text.get_width() // 2, (SCREEN_HEIGHT // 2)+25))
+        screen.blit(title_text, (SCREEN_WIDTH // 2 - title_text.get_width() // 2, (SCREEN_HEIGHT // 3)+105))
+        screen.blit(start_text, (SCREEN_WIDTH // 2 - start_text.get_width() // 2, (SCREEN_HEIGHT // 2)+20))
 
         pygame.display.flip()
         pygame.time.delay(100)
@@ -83,7 +83,7 @@ num_spawn = 2
 last_spawn_time = pygame.time.get_ticks()
 
 # Define font and font size
-font = pygame.font.Font(None, 36)  # You can adjust the font size as needed
+font = pygame.font.Font("ARCADE_N.TTF", 30)  # You can adjust the font size as needed
 score = 0
 
 
@@ -106,8 +106,9 @@ while True:
         num_spawn += 1
 
         # Example of spawning an object: Drawing a rectangle
+        player_position = (player.rect.x,player.rect.y)
         for i in range(num_spawn):
-            ass = Asteroid(random.choice(image_paths),SCREEN_WIDTH,SCREEN_HEIGHT,False)
+            ass = Asteroid(random.choice(image_paths),SCREEN_WIDTH,SCREEN_HEIGHT,False,player_position)
             asteroids.add(ass)
     
     # Inside the game loop, replace the existing player-asteroid collision check
@@ -135,7 +136,7 @@ while True:
             # Split the asteroid into smaller pieces
                 if asteroid.split == False:
                     for i in range(3):  # Create three smaller asteroids
-                        new_asteroid = Asteroid(splits[i], SCREEN_WIDTH, SCREEN_HEIGHT,True)
+                        new_asteroid = Asteroid(splits[i], SCREEN_WIDTH, SCREEN_HEIGHT,True,player_position)
                         new_asteroid.rect.center = asteroid.rect.center  # Position the new asteroid at the same location as the destroyed one
                         asteroids.add(new_asteroid)
 
@@ -179,7 +180,7 @@ while True:
     screen.fill((0, 0, 0))
 
     # Render and display timer text
-    timer_text = font.render(f"Score: {score}", True, (255, 255, 255))
+    timer_text = font.render(f"Score:{score}", True, (255, 255, 255))
     screen.blit(timer_text, (30, 30))  # Adjust the position of the timer text as needed
 
     # screen.blit(background_image, (0, 0))
