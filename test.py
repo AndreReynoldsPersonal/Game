@@ -16,7 +16,7 @@ splits = ['images/piece1.png','images/piece2.png','images/piece3.png']
 
 
 # Constants
-SCREEN_WIDTH, SCREEN_HEIGHT = 1400, 725 #change depending on device?
+SCREEN_WIDTH, SCREEN_HEIGHT = 1600, 900
 FRICTION = 0.95  # Friction coefficient (adjust as needed)
 
 # Create the screen
@@ -24,39 +24,16 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Rotating Player")
 
 
-# Load the player sprite image
-player_image = pygame.image.load("images/ship2.png")  # Replace with your image file name
-player_image = pygame.transform.scale(player_image, (90, 75))  # Adjust the size as needed
-
-
-
-player = Player(player_image,SCREEN_WIDTH,SCREEN_HEIGHT)
-speed_multiplier = 0.75
-
-
-
-
-bullets = pygame.sprite.Group()  # Create a sprite group to store bullets
-asteroids = pygame.sprite.Group()
-
-# Initialize a cooldown timer for firing outside the game loop
-bullet_cooldown = 0
-bullet_cooldown_max = 5  # Adjust this value to control firing rate
-
-clock = pygame.time.Clock()
-score = 0
-
-pygame.mouse.set_visible(False)
-
-
-spawn_interval = 4000
-num_spawn = 2
-last_spawn_time = pygame.time.get_ticks()
+# Colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
 
 # Load start screen assets (images, fonts, etc.)
-font = pygame.font.Font(None, 74)  # Adjust the font and size as needed
-title_text = font.render('Asteroid Game', True, (255,255,255))
-start_text = font.render('Press any key to start', True, (255,255,255))
+font = pygame.font.Font(None, 50)  # Adjust the font and size as needed
+title_text = font.render('Press any key', True, WHITE)
+start_text = font.render('to start', True, WHITE)
+start_screen = pygame.image.load("images/StartScreen.png").convert()
+start_screen = pygame.transform.scale(start_screen, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # Function to show the start screen
 def show_start_screen():
@@ -69,9 +46,10 @@ def show_start_screen():
             elif event.type == pygame.KEYDOWN:
                 running = False  # Exit the start screen loop to start the game
 
-        screen.fill((0,0,0))
-        screen.blit(title_text, (SCREEN_WIDTH // 2 - title_text.get_width() // 2, SCREEN_HEIGHT // 3))
-        screen.blit(start_text, (SCREEN_WIDTH // 2 - start_text.get_width() // 2, SCREEN_HEIGHT // 2))
+        # Draw the background image
+        screen.blit(start_screen, (0, 0))
+        screen.blit(title_text, (SCREEN_WIDTH // 2 - title_text.get_width() // 2, (SCREEN_HEIGHT // 3)+100))
+        screen.blit(start_text, (SCREEN_WIDTH // 2 - start_text.get_width() // 2, (SCREEN_HEIGHT // 2)+25))
 
         pygame.display.flip()
         pygame.time.delay(100)
@@ -79,8 +57,34 @@ def show_start_screen():
 # Show the start screen
 show_start_screen()
 
+
+# Load the player sprite image
+player_image = pygame.image.load("images/ship2.png")  # Replace with your image file name
+player_image = pygame.transform.scale(player_image, (100, 80))  # Adjust the size as needed
+
+player = Player(player_image,SCREEN_WIDTH,SCREEN_HEIGHT)
+speed_multiplier = 0.75
+
+
+bullets = pygame.sprite.Group()  # Create a sprite group to store bullets
+asteroids = pygame.sprite.Group()
+
+# Initialize a cooldown timer for firing outside the game loop
+bullet_cooldown = 0
+bullet_cooldown_max = 5  # Adjust this value to control firing rate
+
+clock = pygame.time.Clock()
+
+pygame.mouse.set_visible(False)
+
+
+spawn_interval = 4000
+num_spawn = 2
+last_spawn_time = pygame.time.get_ticks()
+
 # Define font and font size
 font = pygame.font.Font(None, 36)  # You can adjust the font size as needed
+score = 0
 
 
 # Game loop
@@ -105,20 +109,18 @@ while True:
         for i in range(num_spawn):
             ass = Asteroid(random.choice(image_paths),SCREEN_WIDTH,SCREEN_HEIGHT,False)
             asteroids.add(ass)
-            
-
+    
     # Inside the game loop, replace the existing player-asteroid collision check
     for asteroid in asteroids:
         offset_x = asteroid.rect.x - player.rect.x
         offset_y = asteroid.rect.y - player.rect.y
-        
+
         if player.mask.overlap(asteroid.mask, (offset_x, offset_y)):
             print("hit")
             print(current_time / 1000)
             pygame.quit()
             sys.exit()
-
-
+    
     # Check for collision between bullets and asteroids
     for bullet in bullets:
         asteroid_hit_list = pygame.sprite.spritecollide(bullet, asteroids, True)
@@ -127,6 +129,7 @@ while True:
             bullets.remove(bullet)  # Remove the bullet that hit the asteroid
             print("Asteroid destroyed!")  # Placeholder for actual collision handling
             score +=1
+            # You might want to increase score, create an explosion effect, etc.
 
             for asteroid in asteroid_hit_list:
             # Split the asteroid into smaller pieces
@@ -176,12 +179,8 @@ while True:
     screen.fill((0, 0, 0))
 
     # Render and display timer text
-    timer_text = font.render(f"Time: {int(current_time/1000)}", True, (255, 255, 255))
-    screen.blit(timer_text, (30, 30))  # Adjust the position of the timer text as needed
-
-    # Render and display score text
     timer_text = font.render(f"Score: {score}", True, (255, 255, 255))
-    screen.blit(timer_text, (30, 60))  # Adjust the position of the timer text as needed
+    screen.blit(timer_text, (30, 30))  # Adjust the position of the timer text as needed
 
     # screen.blit(background_image, (0, 0))
     pygame.draw.rect(screen, (255, 255, 255), (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), 2)
@@ -212,12 +211,12 @@ while True:
     pygame.draw.line(screen, (255, 255, 255), (mouse_x, mouse_y - crosshair_size), (mouse_x, mouse_y - gap_size), 2)
     pygame.draw.line(screen, (255, 255, 255), (mouse_x, mouse_y + gap_size), (mouse_x, mouse_y + crosshair_size), 2)
 
-    clock.tick(45)
 
 
-
+    
     pygame.display.flip()
     pygame.time.delay(20)
+    clock.tick(45)
 
     
     
