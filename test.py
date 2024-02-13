@@ -16,7 +16,10 @@ splits = ['images/piece1.png','images/piece2.png','images/piece3.png']
 
 
 # Constants
-SCREEN_WIDTH, SCREEN_HEIGHT = 1600, 900
+#mac
+SCREEN_WIDTH, SCREEN_HEIGHT = 1400, 750
+#pc
+#`aSCREEN_WIDTH, SCREEN_HEIGHT = 1600, 900
 FRICTION = 0.95  # Friction coefficient (adjust as needed)
 
 # Create the screen
@@ -154,6 +157,15 @@ while True:
         player.velocity.x -= speed_multiplier
     if keys[pygame.K_d]:
         player.velocity.x += speed_multiplier
+
+    # if keys[pygame.K_UP]:
+    #     player.velocity.y -= speed_multiplier 
+    # if keys[pygame.K_DOWN]:
+    #     player.velocity.y += speed_multiplier 
+    # if keys[pygame.K_LEFT]:
+    #     player.velocity.x -= speed_multiplier
+    # if keys[pygame.K_RIGHT]:
+    #     player.velocity.x += speed_multiplier
 
 
     #Check for mouse button press without relying on the event loop
