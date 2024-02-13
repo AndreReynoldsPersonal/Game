@@ -5,6 +5,7 @@ import random
 from Player import Player  # Import the Player class from Player.py
 from bullet import Bullet
 from Asteroid import Asteroid
+from PowerUp import PowerUp
 
 # Initialize Pygame
 pygame.init()
@@ -65,12 +66,13 @@ show_start_screen()
 player_image = pygame.image.load("images/ship2.png")  # Replace with your image file name
 player_image = pygame.transform.scale(player_image, (100, 80))  # Adjust the size as needed
 
-player = Player(player_image,SCREEN_WIDTH,SCREEN_HEIGHT)
+player = Player(player_image,SCREEN_WIDTH,SCREEN_HEIGHT,False,"faster")
 speed_multiplier = 0.75
 
 
 bullets = pygame.sprite.Group()  # Create a sprite group to store bullets
 asteroids = pygame.sprite.Group()
+powerups = pygame.sprite.Group()
 
 # Initialize a cooldown timer for firing outside the game loop
 bullet_cooldown = 0
@@ -88,6 +90,9 @@ last_spawn_time = pygame.time.get_ticks()
 # Define font and font size
 font = pygame.font.Font("ARCADE_N.TTF", 30)  # You can adjust the font size as needed
 score = 0
+
+power = PowerUp(SCREEN_WIDTH,SCREEN_HEIGHT,"faster")
+powerups.add(power)
 
 
 # Game loop
@@ -124,6 +129,16 @@ while True:
             print(current_time / 1000)
             pygame.quit()
             sys.exit()
+
+    # Inside the game loop, replace the existing player-asteroid collision check
+    for powerup in powerups:
+        offset_x = powerup.rect.x - player.rect.x
+        offset_y = powerup.rect.y - player.rect.y
+
+        if player.mask.overlap(powerup.mask, (offset_x, offset_y)):
+            powerups.remove(powerup)
+            player.powered = True
+            player.powerType = power.type
     
     # Check for collision between bullets and asteroids
     for bullet in bullets:
@@ -173,7 +188,10 @@ while True:
         if bullet_cooldown <= 0:
             bullet = Bullet(player.rect.center, player.angle)
             bullets.add(bullet)
-            bullet_cooldown = bullet_cooldown_max  # Reset cooldown
+            if(player.powered and player.powerType=="faster"):
+                bullet_cooldown = 3
+            else:
+                bullet_cooldown = bullet_cooldown_max  # Reset cooldown
 
     # Update cooldown
     if bullet_cooldown > 0:
@@ -206,8 +224,14 @@ while True:
     for ass in asteroids:
         screen.blit(ass.image, (ass.rect.x , ass.rect.y))
 
+    # Draw ass
+    for power in powerups:
+        screen.blit(power.image,(power.rect.x, power.rect.y))
+
     # Draw the rotated player sprite
     screen.blit(player.image, (player.rect.x, player.rect.y))
+
+    
 
     # Get mouse position
     mouse_x, mouse_y = pygame.mouse.get_pos()

@@ -2,13 +2,15 @@ import pygame
 import math
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, player_image, screen_width, screen_height):
+    def __init__(self, player_image, screen_width, screen_height,powered,powerType):
         super().__init__()
         self.original_image = player_image
         self.image = self.original_image
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.screen_width = screen_width
+        self.powered = powered
+        self.powerType = powerType
         self.screen_height = screen_height
         self.rect.center = (600, 500)  # Initial position of the player
         self.velocity = pygame.Vector2(0, 0)
