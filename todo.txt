@@ -1,0 +1,5 @@
+- make two unique power ups
+    - rapid fire (shoot faster for X seconds)
+    - shield (can take 1 hit)
+- improve UI 
+- finishing touches call it a day u moron
