@@ -18,10 +18,10 @@ splits = ['images/piece1.png','images/piece2.png','images/piece3.png']
 
 # Constants
 #mac
-SCREEN_WIDTH, SCREEN_HEIGHT = 1400, 750
+# SCREEN_WIDTH, SCREEN_HEIGHT = 1400, 750
 #pc
-#`aSCREEN_WIDTH, SCREEN_HEIGHT = 1600, 900
-FRICTION = 0.95  # Friction coefficient (adjust as needed)
+SCREEN_WIDTH, SCREEN_HEIGHT = 1600, 900
+FRICTION = 0.93  # Friction coefficient (adjust as needed)
 
 # Create the screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
