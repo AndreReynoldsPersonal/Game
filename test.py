@@ -91,7 +91,7 @@ last_spawn_time = pygame.time.get_ticks()
 font = pygame.font.Font("ARCADE_N.TTF", 30)  # You can adjust the font size as needed
 score = 0
 
-power = PowerUp(SCREEN_WIDTH,SCREEN_HEIGHT,"faster")
+power = PowerUp(SCREEN_WIDTH,SCREEN_HEIGHT,"faster","images/m2.png")
 powerups.add(power)
 
 
@@ -132,6 +132,8 @@ while True:
 
     # Inside the game loop, replace the existing player-asteroid collision check
     for powerup in powerups:
+        powerup.update()
+        
         offset_x = powerup.rect.x - player.rect.x
         offset_y = powerup.rect.y - player.rect.y
 
